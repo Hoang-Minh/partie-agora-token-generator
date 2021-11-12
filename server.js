@@ -21,8 +21,8 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
   }
 
   const key = RtcTokenBuilder.buildTokenWithUid(
-    app_id,
-    app_certificate,
+    process.env.API_ID,
+    process.env.API_CERTIFICATE,
     channelName,
     "0",
     RtcRole.PUBLISHER,
