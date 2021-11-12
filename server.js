@@ -11,7 +11,7 @@ app.get("/api/agora/rtcToken", (req, res) => {
 
     const currentTimeStamp = Math.floor(Date.now() / 1000);
     // token expire time, hardcode to 3600 seconds = 1 hour
-    const privilegeExpiredTs = currentTimeStamp + process.env.EXPIRATION_TIME_IN_SECONDS;    
+    const privilegeExpiredTs = currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS);    
     const { channelName } = req.query;
 
     if (!channelName) {
@@ -19,7 +19,7 @@ app.get("/api/agora/rtcToken", (req, res) => {
         return res.status(400).json({ "error": "Channel name is required" }).send();
     }
 
-    const key = RtcTokenBuilder.buildTokenWithUid(process.env.API_ID, process.env.API_CERTIFICATE, channelName, 0, RtcRole.PUBLISHER, privilegeExpiredTs);
+    const key = RtcTokenBuilder.buildTokenWithUid(process.env.API_ID, process.env.API_CERTIFICATE, channelName, 0, 0, privilegeExpiredTs);
     return res.json({ "key": key }).send();
 })
 
