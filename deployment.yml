@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agora-token-deployment
+spec:
+  replicas: 1
+  template:    
+    metadata:
+      labels:
+        app: agora-token-generator
+    spec:
+      containers: 
+        - name: agora-token-app
+          image: agora-token-generator:v1
