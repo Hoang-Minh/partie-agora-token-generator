@@ -1,5 +1,5 @@
-const express = require("express");
 const { port, app_id, app_certificate, expiration_time_in_seconds} = require("./config");
+const express = require("express");
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
 const app = express();
 
