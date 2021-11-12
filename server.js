@@ -19,7 +19,7 @@ app.get("/api/agora/rtcToken", (req, res) => {
         return res.status(400).json({ "error": "Channel name is required" }).send();
     }
 
-    const key = RtcTokenBuilder.buildTokenWithUid(process.env.API_ID, process.env.API_CERTIFICATE, channelName, "0", RtcRole.PUBLISHER, privilegeExpiredTs);
+    const key = RtcTokenBuilder.buildTokenWithUid(process.env.API_ID, process.env.API_CERTIFICATE, channelName, 0, RtcRole.PUBLISHER, privilegeExpiredTs);
     return res.json({ "key": key }).send();
 })
 
