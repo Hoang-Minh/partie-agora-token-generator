@@ -28,7 +28,7 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
     RtcRole.PUBLISHER,
     privilegeExpiredTs
   );
-  return res.json({ key: key }).send();
+  return res.json({ key, privilegeExpiredTs }).send();
 });
 
 app.listen(process.env.PORT, () =>
