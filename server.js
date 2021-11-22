@@ -10,15 +10,17 @@ if (process.env.NODE_ENV !== "production") {
 
 // routes
 app.get("/api/agora/rtcToken", cors(), (req, res) => {
+
   const currentTimeStamp = Math.floor(Date.now() / 1000);
-  // token expire time, hardcode to 3600 seconds = 1 hour
   const privilegeExpiredTs =
-    currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS);
+    currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS); 
+
   const { channelName } = req.query;
 
   if (!channelName) {
     return res.status(400).json({ error: "Channel name is required" }).send();
   }
+
 
   const key = RtcTokenBuilder.buildTokenWithUid(
     process.env.API_ID,
@@ -28,7 +30,7 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
     RtcRole.PUBLISHER,
     privilegeExpiredTs
   );
-  return res.json({ key, privilegeExpiredTs }).send();
+  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
 });
 
 app.listen(process.env.PORT, () =>
