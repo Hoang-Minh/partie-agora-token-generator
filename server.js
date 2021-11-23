@@ -15,33 +15,33 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
   const privilegeExpiredTs =
     currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS); 
 
-  const { channelName } = req.query;
+  const { channelName, userName } = req.query;
 
   if (!channelName) {
     return res.status(400).json({ error: "Channel name is required" }).send();
   }
 
 
-  const key = RtcTokenBuilder.buildTokenWithUid(
-    process.env.API_ID,
-    process.env.API_CERTIFICATE,
-    channelName,
-    "0",
-    RtcRole.PUBLISHER,
-    privilegeExpiredTs
-  );
-  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
-
-
-  // const key = RtcTokenBuilder.buildTokenWithAccount(
+  // const key = RtcTokenBuilder.buildTokenWithUid(
   //   process.env.API_ID,
   //   process.env.API_CERTIFICATE,
   //   channelName,
-  //   "htester",
+  //   "0",
   //   RtcRole.PUBLISHER,
   //   privilegeExpiredTs
   // );
   // return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
+
+
+  const key = RtcTokenBuilder.buildTokenWithAccount(
+    process.env.API_ID,
+    process.env.API_CERTIFICATE,
+    channelName,
+    userName,
+    RtcRole.PUBLISHER,
+    privilegeExpiredTs
+  );
+  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
 
 });
 
