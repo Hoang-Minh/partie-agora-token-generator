@@ -21,16 +21,15 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
     return res.status(400).json({ error: "Channel name is required" }).send();
   }
 
-  const key = RtcTokenBuilder.buildTokenWithAccount(
+  const key = RtcTokenBuilder.buildTokenWithUid(
     process.env.API_ID,
     process.env.API_CERTIFICATE,
     channelName,
-    userUid,
+    Number(userUid),
     RtcRole.PUBLISHER,
     privilegeExpiredTs
   );
   return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
-
 });
 
 app.listen(process.env.PORT, () =>
