@@ -26,7 +26,7 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
     process.env.API_ID,
     process.env.API_CERTIFICATE,
     channelName,
-    "0",
+    "htester",
     RtcRole.PUBLISHER,
     privilegeExpiredTs
   );
