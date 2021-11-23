@@ -22,7 +22,18 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
   }
 
 
-  // const key = RtcTokenBuilder.buildTokenWithUid(
+  const key = RtcTokenBuilder.buildTokenWithUid(
+    process.env.API_ID,
+    process.env.API_CERTIFICATE,
+    channelName,
+    "0",
+    RtcRole.PUBLISHER,
+    privilegeExpiredTs
+  );
+  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
+
+
+  // const key = RtcTokenBuilder.buildTokenWithAccount(
   //   process.env.API_ID,
   //   process.env.API_CERTIFICATE,
   //   channelName,
@@ -31,17 +42,6 @@ app.get("/api/agora/rtcToken", cors(), (req, res) => {
   //   privilegeExpiredTs
   // );
   // return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
-
-
-  const key = RtcTokenBuilder.buildTokenWithAccount(
-    process.env.API_ID,
-    process.env.API_CERTIFICATE,
-    channelName,
-    "htester",
-    RtcRole.PUBLISHER,
-    privilegeExpiredTs
-  );
-  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
 
 });
 
