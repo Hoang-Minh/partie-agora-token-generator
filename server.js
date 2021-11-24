@@ -9,27 +9,50 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // routes
-app.get("/api/agora/rtcToken", cors(), (req, res) => {
-
+app.get("/api/agora/rtcToken/:tokenType", cors(), (req, res) => {
   const currentTimeStamp = Math.floor(Date.now() / 1000);
   const privilegeExpiredTs =
-    currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS); 
+    currentTimeStamp + Number(process.env.EXPIRATION_TIME_IN_SECONDS);
 
-  const { channelName, userUid } = req.query;  
+  const { channelName, user } = req.query;
 
   if (!channelName) {
     return res.status(400).json({ error: "Channel name is required" }).send();
   }
 
-  const key = RtcTokenBuilder.buildTokenWithUid(
-    process.env.API_ID,
-    process.env.API_CERTIFICATE,
-    channelName,
-    Number(userUid),
-    RtcRole.PUBLISHER,
-    privilegeExpiredTs
-  );
-  return res.json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS }).send();
+  const tokenType = req.params.tokenType;
+
+  if (!tokenType) {
+    return res.status(400).json({ error: "token type is required" }).send();
+  }
+
+  if (tokenType === "uid") {
+    const key = RtcTokenBuilder.buildTokenWithUid(
+      process.env.API_ID,
+      process.env.API_CERTIFICATE,
+      channelName,
+      Number(user),
+      RtcRole.PUBLISHER,
+      privilegeExpiredTs
+    );
+    return res
+      .json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS })
+      .send();
+  } else if (tokenType === "account") {
+    const key = RtcTokenBuilder.buildTokenWithAccount(
+      process.env.API_ID,
+      process.env.API_CERTIFICATE,
+      channelName,
+      user,
+      RtcRole.PUBLISHER,
+      privilegeExpiredTs
+    );
+    return res
+      .json({ key, expireInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS })
+      .send();
+  } else {
+    return res.status(400).json({ error: "Invalid token type" }).send();
+  }
 });
 
 app.listen(process.env.PORT, () =>
